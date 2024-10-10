@@ -5,7 +5,17 @@ from pygments.lexer import default
 
 st.title ("Mon premier APP")
 
-st.write("Hello world")
+st.write("SQL repetition practice")
+
+option = st.selectbox(
+    "what would you like to review?",
+    ("Joins","GroupBy","Windows functions"),
+    index=None,
+    placeholder = "select a theme"
+)
+
+st.write("You selected",option)
+
 data = {"a": [1, 2, 3], "b": [4, 5, 6]}
 df = pd.DataFrame(data)
 
