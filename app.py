@@ -1,7 +1,7 @@
-import pandas as pd
 import streamlit as st
+import pandas as pd
 import duckdb
-from pygments.lexer import default
+
 
 st.title ("Mon premier APP")
 
