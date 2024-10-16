@@ -8,14 +8,6 @@ st.title ("Mon premier APP")
 
 st.write("SQL repetition practice")
 
-option = st.selectbox(
-    "what would you like to review?",
-    ("Joins","GroupBy","Windows functions"),
-    index=None,
-    placeholder = "select a theme"
-)
-
-st.write("You selected",option)
 
 with st.sidebar:
     option = st.selectbox(
@@ -26,8 +18,6 @@ with st.sidebar:
     )
 
     st.write("You selected",option)
-
-st.title ("Mon premier APP")
 
 
 csv = '''
@@ -52,11 +42,11 @@ CROSS JOIN food_items
 """
 
 solution = duckdb.sql(answer).df()
-st.header("Entrez votre code")
 
+st.header("Entrez votre code")
 query = st.text_area(label="entrez votre input",key="user_input")
 
-if query: #Affichage conditionnelle
+if query:
     result = duckdb.sql(query).df()
     st.dataframe(result)
 
