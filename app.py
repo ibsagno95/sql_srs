@@ -7,6 +7,7 @@ import duckdb
 import pandas as pd
 import streamlit as st
 
+
 with st.sidebar:
     option = st.selectbox(
         "what would you like to review?",
