@@ -8,15 +8,6 @@ st.title ("Mon premier APP")
 
 st.write("SQL repetition practice")
 
-option = st.selectbox(
-    "what would you like to review?",
-    ("Joins","GroupBy","Windows functions"),
-    index=None,
-    placeholder = "select a theme"
-)
-
-st.write("You selected",option)
-
 with st.sidebar:
     option = st.selectbox(
         "what would you like to review?",
