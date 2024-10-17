@@ -1,10 +1,10 @@
-
 #pylint:disable=missing-module-docstring
 
 import io
 import duckdb
 import pandas as pd
 import streamlit as st
+import plotly.express as px
 
 with st.sidebar:
     option = st.selectbox(
@@ -75,4 +75,8 @@ with tab1:
 
 with tab2:
     st.write(ANSWER_DF)
+
+fig = px.scatter(solution_df, x="price", y="food_price")
+
+st.plotly_chart(fig)
 
