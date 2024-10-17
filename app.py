@@ -1,57 +1,70 @@
-import streamlit as st
-import pandas as pd
-import duckdb
+
+#pylint:disable=missing-module-docstring
+
 import io
-from pygments.lexer import default
 
-st.title ("Mon premier APP")
-
-st.write("SQL repetition practice")
+import duckdb
+import pandas as pd
+import streamlit as st
 
 with st.sidebar:
     option = st.selectbox(
         "what would you like to review?",
-        ("Joins","GroupBy","Windows functions"),
+        ("Joins", "GroupBy", "Windows functions"),
         index=None,
-        placeholder = "select a theme"
+        placeholder="select a theme",
     )
 
-    st.write("You selected",option)
+    st.write("You selected", option)
 
-st.title ("Mon premier APP")
+st.title("Mon premier APP")
 
-
-csv = '''
+CSV = """
 beverage,price
 orange juice,2.5
 Expresso,2
 Tea,3
-'''
-beverages = pd.read_csv(io.StringIO(csv))
+"""
+beverages = pd.read_csv(io.StringIO(CSV))
 
-csv2 = '''
+CSV2 = """
 food_item,food_price
 cookie,2.5
 choco,2.5
 muffin,3
-'''
-food_items = pd.read_csv(io.StringIO(csv2))
+"""
+food_items = pd.read_csv(io.StringIO(CSV2))
 
-answer = """
+ANSWER_DF = """
 SELECT * FROM beverages
 CROSS JOIN food_items
 """
 
-solution = duckdb.sql(answer).df()
+solution_df = duckdb.sql(ANSWER_DF).df()
 st.header("Entrez votre code")
 
-query = st.text_area(label="entrez votre input",key="user_input")
+query = st.text_area(label="entrez votre input", key="user_input")
 
-if query: #Affichage conditionnelle
+if query:  # Affichage conditionnelle
     result = duckdb.sql(query).df()
     st.dataframe(result)
 
-tab1,tab2 = st.tabs(["Tables","Solution"])
+    if len(solution_df.columns) != len(result.columns):
+        st.write("Il manque des colonnes")
+
+    try:
+        result = result[solution_df.columns]
+        st.dataframe(result.compare(solution_df))
+    except KeyError as e:
+        st.write("Il manque des colonnes")
+
+    n_difference = abs(solution_df.shape[0] - result.shape[0])
+
+    if n_difference != 0:
+        st.write(f"Il y'a {n_difference} lignes de difference entre les solution")
+
+
+tab1, tab2 = st.tabs(["Tables", "Solution"])
 
 with tab1:
     st.write("table:beverages")
@@ -59,10 +72,8 @@ with tab1:
     st.write("tables: food_items")
     st.dataframe(food_items)
     st.write("expected table:")
-    st.dataframe(solution)
+    st.dataframe(solution_df)
 
 with tab2:
-    st.write(answer)
-
-
+    st.write(ANSWER_DF)
 
