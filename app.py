@@ -1,3 +1,4 @@
+
 #pylint:disable=missing-module-docstring
 
 import io
@@ -17,7 +18,6 @@ with st.sidebar:
     st.write("You selected", option)
 
 st.title("Mon premier APP")
-
 
 CSV = """
 beverage,price
@@ -77,10 +77,3 @@ with tab1:
 with tab2:
     st.write(ANSWER_DF)
 
-# data = {"a": [1, 2, 3], "b": [4, 5, 6]}
-# df = pd.DataFrame(data)
-
-# sql_query = st.text_area(label="entrez votre input")
-# result= duckdb.query(sql_query).df()
-# query = st.write(f"vous avez rentrez la requête suivante {sql_query}")
-# st.dataframe(result)
