@@ -1,4 +1,4 @@
-#pylint:disable=missing-module-docstring
+# pylint:disable=missing-module-docstring
 
 import io
 import duckdb
@@ -79,4 +79,3 @@ with tab2:
 fig = px.scatter(solution_df, x="price", y="food_price")
 
 st.plotly_chart(fig)
-
