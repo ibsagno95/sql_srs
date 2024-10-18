@@ -1,12 +1,14 @@
 #pylint:disable=missing-module-docstring
 import io
 import os
-
+import logging
 import duckdb
 import pandas as pd
 import streamlit as st
 
 if "data" not in os.listdir():
+    logging.error(os.listdir())
+    logging.error("creating folder data")
     os.mkdir("data")
 
 if "sql_exercises.duckdb" not in os.listdir("data"):
