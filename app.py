@@ -1,53 +1,40 @@
-
 #pylint:disable=missing-module-docstring
-
 import io
-
+import ast
 import duckdb
 import pandas as pd
 import streamlit as st
 
+con = duckdb.connect(database="data/sql_exercises.duckdb",read_only=False)
 
 with st.sidebar:
-    option = st.selectbox(
+    theme = st.selectbox(
         "what would you like to review?",
-        ("Joins", "GroupBy", "Windows functions"),
+        ("cross_joins", "GroupBy", "Windows functions"),
         index=None,
         placeholder="select a theme",
     )
 
-    st.write("You selected", option)
+    st.write("You selected", theme)
+
+    exercise = con.execute(f"SELECT * FROM memory_state WHERE theme = '{theme}' ").df()
+    st.write(exercise)
+
+    exercise_name = exercise.loc[0,"exercise_name"]
+
+    with open(f"answer/{exercise_name}.sql","r") as f:
+        answer_str=f.read()
+
+    solution_df = con.execute(answer_str).df()
 
 st.title("Mon premier APP")
 
-CSV = """
-beverage,price
-orange juice,2.5
-Expresso,2
-Tea,3
-"""
-beverages = pd.read_csv(io.StringIO(CSV))
-
-CSV2 = """
-food_item,food_price
-cookie,2.5
-choco,2.5
-muffin,3
-"""
-food_items = pd.read_csv(io.StringIO(CSV2))
-
-ANSWER_DF = """
-SELECT * FROM beverages
-CROSS JOIN food_items
-"""
-
-solution_df = duckdb.sql(ANSWER_DF).df()
 st.header("Entrez votre code")
 
 query = st.text_area(label="entrez votre input", key="user_input")
 
-if query:  # Affichage conditionnelle
-    result = duckdb.sql(query).df()
+if query:
+    result = con.execute(query).df()
     st.dataframe(result)
 
     if len(solution_df.columns) != len(result.columns):
@@ -65,16 +52,15 @@ if query:  # Affichage conditionnelle
         st.write(f"Il y'a {n_difference} lignes de difference entre les solution")
 
 
-tab1, tab2 = st.tabs(["Tables", "Solution"])
 
+tab1, tab2 = st.tabs(["Tables", "Solution"])
 with tab1:
-    st.write("table:beverages")
-    st.dataframe(beverages)
-    st.write("tables: food_items")
-    st.dataframe(food_items)
-    st.write("expected table:")
-    st.dataframe(solution_df)
+    exercises_tables = ast.literal_eval(exercise.loc[0,"tables"])
+    for table in exercises_tables:
+        st.write(f"table: {table}")
+        df_table=con.execute(f"SELECT * FROM {table} ").df()
+        st.dataframe(df_table)
+
 
 with tab2:
-    st.write(ANSWER_DF)
-
+    st.text(answer_str)

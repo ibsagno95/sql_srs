@@ -2,7 +2,6 @@ import io
 import duckdb
 import pandas as pd
 
-from app2 import food_items
 
 con = duckdb.connect(database="data/sql_exercises.duckdb",read_only=False)
 
@@ -15,7 +14,7 @@ data = {
     "theme": ["cross_joins","window_functions"],
     "exercise_name": ["beverages_and_food", "simple_functions"],
     "tables": [["beverages", "food_items"],"simple_window"],
-    "last_reviewed": ["1970-01-01","1970-01-01"],
+    "last_reviewed": ["1970-01-01","1970-01-01"]
 }
 
 memory_state_df = pd.DataFrame(data)
